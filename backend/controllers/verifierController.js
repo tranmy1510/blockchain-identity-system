@@ -1,6 +1,7 @@
 const Identity = require("../models/Identity");
 const HistoryLog = require("../models/HistoryLog");
 const generateIdentityHash = require("../utils/generateHash");
+const { storeIdentityOnBlockchain } = require("../utils/blockchain");
 
 // Get all pending identities
 const getPendingIdentities = async (req, res) => {
@@ -72,16 +73,23 @@ const approveIdentity = async (req, res) => {
 
     const identityHash = generateIdentityHash(identity);
 
+    const txHash = await storeIdentityOnBlockchain(
+      identity.userId,
+      identityHash
+    );
+
     identity.status = "Verified";
     identity.identityHash = identityHash;
+    identity.blockchainTxHash = txHash;
 
     await identity.save();
 
     await HistoryLog.create({
       userId: identity.userId,
       action: "APPROVE_IDENTITY",
-      description: "Verifier approved identity profile",
-      txHash: identity.blockchainTxHash || null,
+      description:
+        "Verifier approved identity profile and stored hash on blockchain",
+      txHash,
     });
 
     return res.status(200).json({
