@@ -4,12 +4,20 @@ const HistoryLog = require("../models/HistoryLog");
 // Create identity
 const createIdentity = async (req, res) => {
   try {
-    const { fullName, dob, email, documentId, address } = req.body;
+    const {
+      fullName,
+      dob,
+      email,
+      documentId,
+      address,
+      phone,
+      idPhoto,
+    } = req.body;
 
     if (!fullName || !dob || !email || !documentId || !address) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "All required fields are required",
       });
     }
 
@@ -31,6 +39,8 @@ const createIdentity = async (req, res) => {
       email,
       documentId,
       address,
+      phone: phone || "",
+      idPhoto: idPhoto || "",
     });
 
     await HistoryLog.create({
@@ -83,7 +93,15 @@ const getMyIdentity = async (req, res) => {
 // Update my identity
 const updateIdentity = async (req, res) => {
   try {
-    const { fullName, dob, email, documentId, address } = req.body;
+    const {
+      fullName,
+      dob,
+      email,
+      documentId,
+      address,
+      phone,
+      idPhoto,
+    } = req.body;
 
     const identity = await Identity.findOne({
       userId: req.user._id,
@@ -108,6 +126,8 @@ const updateIdentity = async (req, res) => {
     identity.email = email || identity.email;
     identity.documentId = documentId || identity.documentId;
     identity.address = address || identity.address;
+    identity.phone = phone !== undefined ? phone : identity.phone;
+    identity.idPhoto = idPhoto !== undefined ? idPhoto : identity.idPhoto;
 
     if (identity.status === "Rejected") {
       identity.status = "Not Submitted";

@@ -39,6 +39,17 @@ const identitySchema = new mongoose.Schema(
       trim: true,
     },
 
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    idPhoto: {
+      type: String,
+      default: "",
+    },
+
     status: {
       type: String,
       enum: [

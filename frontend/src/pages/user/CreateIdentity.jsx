@@ -9,6 +9,7 @@ import {
   CreditCard,
   MapPin,
   Calendar,
+  Phone,
 } from "lucide-react";
 import API from "../../services/api";
 
@@ -24,14 +25,31 @@ export default function CreateIdentity() {
     email: "",
     documentId: "",
     address: "",
+    phone: "",
+    idPhoto: "",
   });
 
   const handleImage = (e) => {
     const file = e.target.files[0];
 
-    if (file) {
-      setPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
     }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setPreview(reader.result);
+      setForm((prev) => ({
+        ...prev,
+        idPhoto: reader.result,
+      }));
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleChange = (e) => {
@@ -78,11 +96,11 @@ export default function CreateIdentity() {
           Digital Identity Registration
         </p>
 
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-4xl font-bold text-[#ffe9a3]">
           Create Digital Identity
         </h1>
 
-        <p className="text-gray-400 mt-3">
+        <p className="text-[#9fb3c8] mt-3">
           Enter your personal information. Your real data is stored off-chain,
           while only the identity hash is stored on blockchain after verifier
           approval.
@@ -91,8 +109,8 @@ export default function CreateIdentity() {
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="glass rounded-3xl p-6 border border-white/10 shadow-xl">
-            <div className="w-full aspect-square rounded-3xl overflow-hidden border border-white/10 bg-white/5 flex items-center justify-center">
+          <div className="rounded-3xl p-6 border border-[#2b2207] bg-[#111111] shadow-xl">
+            <div className="w-full aspect-square rounded-3xl overflow-hidden border border-[#2b2207] bg-[#0d0d0d] flex items-center justify-center">
               {preview ? (
                 <img
                   src={preview}
@@ -100,7 +118,7 @@ export default function CreateIdentity() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="text-center text-gray-400">
+                <div className="text-center text-[#8f8568]">
                   <Upload size={44} className="mx-auto mb-3" />
                   Upload ID Photo
                 </div>
@@ -109,25 +127,34 @@ export default function CreateIdentity() {
 
             <label className="mt-5 w-full inline-flex items-center justify-center bg-gold text-black px-6 py-3 rounded-xl cursor-pointer font-semibold hover:opacity-90 transition">
               Upload Image
-              <input type="file" className="hidden" onChange={handleImage} />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImage}
+              />
             </label>
 
-            <div className="mt-8 rounded-2xl bg-white/5 border border-white/10 p-5">
-              <h2 className="text-lg font-bold mb-4">Data Protection</h2>
+            <div className="mt-8 rounded-2xl bg-[#0d0d0d] border border-[#2b2207] p-5">
+              <h2 className="text-lg font-bold mb-4 text-[#ffe9a3]">
+                Data Protection
+              </h2>
 
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-400">Storage</span>
-                  <span className="text-right">MongoDB Off-chain</span>
+                  <span className="text-[#8f8568]">Storage</span>
+                  <span className="text-right text-[#f5e6b8]">
+                    MongoDB Off-chain
+                  </span>
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-400">Blockchain</span>
+                  <span className="text-[#8f8568]">Blockchain</span>
                   <span className="text-green-400 text-right">Hash Only</span>
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-400">Status</span>
+                  <span className="text-[#8f8568]">Status</span>
                   <span className="text-yellow-400 text-right">
                     Pending after submit
                   </span>
@@ -139,112 +166,93 @@ export default function CreateIdentity() {
 
         <form
           onSubmit={handleSubmit}
-          className="lg:col-span-2 glass rounded-3xl p-8 border border-white/10 shadow-xl"
+          className="lg:col-span-2 rounded-3xl p-8 border border-[#2b2207] bg-[#111111] shadow-xl"
         >
-          <h2 className="text-2xl font-bold mb-2">Identity Information</h2>
+          <h2 className="text-2xl font-bold mb-2 text-[#ffe9a3]">
+            Identity Information
+          </h2>
 
-          <p className="text-gray-400 mb-8">
+          <p className="text-[#9fb3c8] mb-8">
             These fields will be sent to backend and saved in MongoDB. Verifier
             will review this profile.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block mb-2 text-gray-400">Full Name</label>
+            <Field
+              label="Full Name"
+              icon={<User className="text-[#8f8568]" />}
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              type="text"
+              placeholder="Nguyen Van A"
+              required
+            />
 
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4">
-                <User className="text-gray-400" />
+            <Field
+              label="Date of Birth"
+              icon={<Calendar className="text-[#8f8568]" />}
+              name="dob"
+              value={form.dob}
+              onChange={handleChange}
+              type="date"
+              min="1900-01-01"
+              max="2099-12-31"
+              required
+            />
 
-                <input
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Nguyen Van A"
-                  className="w-full bg-transparent p-4 outline-none"
-                  required
-                />
-              </div>
-            </div>
+            <Field
+              label="Email Address"
+              icon={<Mail className="text-[#8f8568]" />}
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              type="email"
+              placeholder="user@example.com"
+              required
+            />
 
-            <div>
-              <label className="block mb-2 text-gray-400">Date of Birth</label>
+            <Field
+              label="Phone Number"
+              icon={<Phone className="text-[#8f8568]" />}
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              type="text"
+              placeholder="0987654321"
+            />
 
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4">
-                <Calendar className="text-gray-400" />
-
-                <input
-                  name="dob"
-                  value={form.dob}
-                  onChange={handleChange}
-                  type="date"
-                  max="2099-12-31"
-                  min="1900-01-01"
-                  className="w-full bg-transparent p-4 outline-none text-white"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block mb-2 text-gray-400">Email Address</label>
-
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4">
-                <Mail className="text-gray-400" />
-
-                <input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  type="email"
-                  placeholder="user@example.com"
-                  className="w-full bg-transparent p-4 outline-none"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block mb-2 text-gray-400">National ID</label>
-
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4">
-                <CreditCard className="text-gray-400" />
-
-                <input
-                  name="documentId"
-                  value={form.documentId}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="012345678901"
-                  className="w-full bg-transparent p-4 outline-none"
-                  required
-                />
-              </div>
-            </div>
+            <Field
+              label="National ID"
+              icon={<CreditCard className="text-[#8f8568]" />}
+              name="documentId"
+              value={form.documentId}
+              onChange={handleChange}
+              type="text"
+              placeholder="012345678901"
+              required
+            />
 
             <div className="md:col-span-2">
-              <label className="block mb-2 text-gray-400">Address</label>
-
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4">
-                <MapPin className="text-gray-400" />
-
-                <input
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Ha Noi, Viet Nam"
-                  className="w-full bg-transparent p-4 outline-none"
-                  required
-                />
-              </div>
+              <Field
+                label="Address"
+                icon={<MapPin className="text-[#8f8568]" />}
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                type="text"
+                placeholder="Ha Noi, Viet Nam"
+                required
+              />
             </div>
           </div>
 
-          <div className="mt-8 rounded-2xl bg-blue-500/10 border border-blue-500/20 p-5">
-            <h3 className="font-bold mb-2">What happens after submission?</h3>
+          <div className="mt-8 rounded-2xl bg-[#1a1405] border border-[#2b2207] p-5">
+            <h3 className="font-bold mb-2 text-[#ffe9a3]">
+              What happens after submission?
+            </h3>
 
-            <p className="text-gray-300 text-sm leading-6">
+            <p className="text-[#d6caa8] text-sm leading-6">
               Your profile will be created and automatically submitted with
               status <span className="text-yellow-400">Pending</span>. The
               verifier will review it. If approved, backend will create a hash
@@ -267,6 +275,41 @@ export default function CreateIdentity() {
             )}
           </button>
         </form>
+      </div>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  icon,
+  name,
+  value,
+  onChange,
+  type,
+  placeholder,
+  required,
+  min,
+  max,
+}) {
+  return (
+    <div>
+      <label className="block mb-2 text-[#8f8568]">{label}</label>
+
+      <div className="flex items-center gap-3 bg-[#0d0d0d] border border-[#2b2207] rounded-2xl px-4 focus-within:border-[#d4a017] transition">
+        {icon}
+
+        <input
+          name={name}
+          value={value}
+          onChange={onChange}
+          type={type}
+          placeholder={placeholder}
+          min={min}
+          max={max}
+          className="w-full bg-transparent p-4 outline-none text-[#f5e6b8] placeholder:text-[#6f674f]"
+          required={required}
+        />
       </div>
     </div>
   );

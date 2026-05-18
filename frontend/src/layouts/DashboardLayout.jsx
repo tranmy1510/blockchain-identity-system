@@ -9,11 +9,11 @@ export default function DashboardLayout() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white lg:flex">
+    <div className="min-h-screen bg-[#080808] text-[#f5e6b8] lg:flex">
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/70 lg:hidden"
         />
       )}
 
@@ -28,28 +28,30 @@ export default function DashboardLayout() {
         <Sidebar />
       </aside>
 
-      <div className="min-h-screen flex-1">
-        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-[#0B1020]/95 px-6 py-4 backdrop-blur-xl">
+      <div className="min-h-screen flex-1 bg-[#080808]">
+        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-[#2b2207] bg-[#080808]/95 px-6 py-4 backdrop-blur-xl">
           <button
             onClick={() => setOpen(!open)}
-            className="rounded-xl border border-white/10 bg-white/5 p-2 lg:hidden"
+            className="rounded-xl border border-[#2b2207] bg-[#111111] p-2 text-[#d4a017] lg:hidden"
           >
             {open ? <X /> : <Menu />}
           </button>
 
-          <div className="hidden lg:flex items-center gap-2 text-sm text-gray-400">
-            <span className="text-white font-semibold">VeriChain</span>
-            <span>/</span>
-            <span className="capitalize">{user?.role || "Guest"}</span>
+          <div className="hidden lg:flex items-center gap-2 text-sm text-[#8f8568]">
+            <span className="text-[#f5e6b8] font-semibold">VeriChain</span>
+            <span className="text-[#5c543f]">/</span>
+            <span className="capitalize text-[#d4a017]">
+              {user?.role || "Guest"}
+            </span>
           </div>
 
           <div className="flex items-center gap-3 ml-auto">
-            <div className="flex items-center gap-2 rounded-full border bg-gold/20 bg-gold/10 px-3 py-1.5 text-xs text-cyan-300">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+            <div className="flex items-center gap-2 rounded-full border border-[#d4a017]/50 bg-[#1a1405] px-3 py-1.5 text-xs font-medium text-[#f6c744]">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#d4a017]" />
               Local Blockchain
             </div>
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-cyan-300">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2b2207] bg-[#111111] text-sm font-semibold text-[#f6c744]">
               {user?.name?.[0]?.toUpperCase() || "U"}
             </div>
           </div>
@@ -57,7 +59,7 @@ export default function DashboardLayout() {
           <div className="w-10 lg:hidden" />
         </div>
 
-        <main className="p-6">
+        <main className="min-h-[calc(100vh-73px)] bg-[#080808] p-6">
           <Outlet />
         </main>
       </div>

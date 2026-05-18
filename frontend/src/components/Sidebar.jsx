@@ -29,10 +29,10 @@ export default function Sidebar() {
     return (
       <Link
         to={to}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition ${
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition border ${
           active
-            ? "bg-gold-bg border border-gold-dim text-gold font-medium"
-            : "text-[#666] hover:text-[#aaa] hover:bg-white/5"
+            ? "bg-[#1a1405] border-[#d4a017]/60 text-[#f6c744] font-semibold shadow-[0_0_18px_rgba(212,160,23,0.12)]"
+            : "border-transparent text-[#7a745f] hover:text-[#f5e6b8] hover:bg-[#14110a] hover:border-[#2b2207]"
         }`}
       >
         {icon}
@@ -42,7 +42,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 h-screen bg-dark-2 border-r border-dark-border flex flex-col px-4 py-5 gap-2">
+    <div className="w-64 h-screen bg-[#050505] border-r border-[#2b2207] flex flex-col px-4 py-5 gap-2">
       <div className="px-2 mb-4">
         <VeriChainLogo />
       </div>
@@ -93,28 +93,28 @@ export default function Sidebar() {
         )}
       </nav>
 
-      <div className="card p-3 mx-1 mb-2">
+      <div className="rounded-2xl border border-[#2b2207] bg-[#0d0d0d] p-3 mx-1 mb-2">
         <div className="section-label mb-1.5">Wallet</div>
 
         {walletAddress ? (
-          <div className="mono text-xs">
+          <div className="font-mono text-xs text-[#f6c744]">
             {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
           </div>
         ) : (
           <button
             onClick={connectWallet}
-            className="text-xs text-gold hover:opacity-80 transition"
+            className="text-xs font-semibold text-[#d4a017] hover:text-[#f6c744] transition"
           >
             + Connect Wallet
           </button>
         )}
 
-        <div className="text-[11px] text-[#444] mt-1">Local Blockchain</div>
+        <div className="text-[11px] text-[#6f674f] mt-1">Local Blockchain</div>
       </div>
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-[#6b2020] hover:bg-[#1a0a0a] transition"
+        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-[#b94a4a] hover:bg-[#1a0a0a] hover:text-[#ff6b6b] transition"
       >
         <LogOut size={16} />
         <span>Logout</span>
