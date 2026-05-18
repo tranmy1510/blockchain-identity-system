@@ -14,6 +14,7 @@ import CreateIdentity from "./pages/user/CreateIdentity";
 import TransactionHistory from "./pages/user/TransactionHistory";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import BlockchainExplorer from "./pages/user/BlockchainExplorer";
+import ShareAccess from "./pages/user/ShareAccess";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -58,6 +59,16 @@ export default function App() {
             element={
               <ProtectedRoute allowedRole="user">
                 <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Route bị thiếu - đã thêm */}
+          <Route
+            path="/user/share-access"
+            element={
+              <ProtectedRoute allowedRole="user">
+                <ShareAccess />
               </ProtectedRoute>
             }
           />
