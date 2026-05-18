@@ -1,196 +1,90 @@
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard,
-  ShieldCheck,
-  Users,
-  FileClock,
-  LogOut,
-  Search,
+  LayoutDashboard, ShieldCheck, Users,
+  FileClock, LogOut, Search,
 } from "lucide-react";
-
-import {
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
+import { useWallet } from "../context/WalletContext";
+import VeriChainLogo from "./VeriChainLogo";
 
 export default function Sidebar() {
-
   const { logout, user } = useAuth();
+  const { walletAddress, connectWallet } = useWallet();
+  const navigate  = useNavigate();
+  const location  = useLocation();
 
-  const navigate = useNavigate();
+  const handleLogout = () => { logout(); navigate("/"); };
 
-  const location = useLocation();
-
-  const handleLogout = () => {
-
-    logout();
-
-    navigate("/");
+  const navItem = (to, icon, label) => {
+    const active = location.pathname === to;
+    return (
+      <Link
+        to={to}
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition
+          ${active
+            ? "bg-gold-bg border border-gold-dim text-gold font-medium"
+            : "text-[#666] hover:text-[#aaa] hover:bg-white/5"
+          }`}
+      >
+        {icon}
+        {label}
+      </Link>
+    );
   };
 
   return (
+    <div
+      className="w-64 h-screen bg-dark-2 border-r border-dark-border
+                 flex flex-col px-4 py-5 gap-2"
+    >
+      {/* LOGO */}
+      <div className="px-2 mb-4">
+        <VeriChainLogo />
+      </div>
 
-    <div className="w-72 h-screen glass border-r border-white/10 p-6 flex flex-col justify-between">
+      {/* MENU */}
+      <div className="section-label px-2 mb-1">Menu</div>
 
-      {/* TOP */}
+      <nav className="flex flex-col gap-1 flex-1">
+        {navItem(`/${user?.role}/dashboard`, <LayoutDashboard size={16} />, "Dashboard")}
 
-      <div>
+        {user?.role === "admin" && <>
+          {navItem("/admin/dashboard", <LayoutDashboard size={16} />, "Admin Panel")}
+        </>}
 
-        {/* LOGO */}
+        {user?.role === "user" && <>
+          {navItem("/user/create-identity", <ShieldCheck size={16} />, "Create Identity")}
+          {navItem("/user/share-access",    <Users size={16} />,       "Share Access")}
+          {navItem("/explorer",             <Search size={16} />,      "Blockchain Explorer")}
+          {navItem("/user/history",         <FileClock size={16} />,   "History")}
+        </>}
+      </nav>
 
-        <div className="mb-10">
-
-          <h1 className="text-3xl font-bold">
-            Veri<span className="text-secondary">Chain</span>
-          </h1>
-
-          <p className="text-gray-400 text-sm mt-2 capitalize">
-            {user?.role || "Guest"}
-          </p>
-
-        </div>
-
-        {/* MENU */}
-
-        <div className="space-y-3">
-
-          {/* DASHBOARD */}
-
-          <Link
-            to={`/${user?.role}/dashboard`}
-            className={`
-              w-full flex items-center gap-3 p-4 rounded-xl transition
-              ${
-                location.pathname === `/${user?.role}/dashboard`
-                  ? "bg-secondary text-black font-semibold"
-                  : "hover:bg-white/10"
-              }
-            `}
+      {/* WALLET */}
+      <div className="card p-3 mx-1 mb-2">
+        <div className="section-label mb-1.5">Wallet</div>
+        {walletAddress ? (
+          <div className="mono text-xs">{walletAddress.slice(0,6)}...{walletAddress.slice(-4)}</div>
+        ) : (
+          <button
+            onClick={connectWallet}
+            className="text-xs text-gold hover:opacity-80 transition"
           >
-            <LayoutDashboard />
-            <span>Dashboard</span>
-          </Link>
-
-          {/* ADMIN MENU */}
-
-          {
-            user?.role === "admin" && (
-
-              <Link
-                to="/admin/dashboard"
-                className={`
-                  w-full flex items-center gap-3 p-4 rounded-xl transition
-                  ${
-                    location.pathname === "/admin/dashboard"
-                      ? "bg-secondary text-black font-semibold"
-                      : "hover:bg-white/10"
-                  }
-                `}
-              >
-                <LayoutDashboard />
-                <span>Admin Dashboard</span>
-              </Link>
-
-            )
-          }
-
-          {/* USER MENUS */}
-
-          {
-            user?.role === "user" && (
-              <>
-
-                {/* CREATE IDENTITY */}
-
-                <Link
-                  to="/user/create-identity"
-                  className={`
-                    w-full flex items-center gap-3 p-4 rounded-xl transition
-                    ${
-                      location.pathname === "/user/create-identity"
-                        ? "bg-secondary text-black font-semibold"
-                        : "hover:bg-white/10"
-                    }
-                  `}
-                >
-                  <ShieldCheck />
-                  <span>Create Identity</span>
-                </Link>
-
-                {/* SHARE ACCESS */}
-
-                <Link
-                  to="/user/share-access"
-                  className={`
-                    w-full flex items-center gap-3 p-4 rounded-xl transition
-                    ${
-                      location.pathname === "/user/share-access"
-                        ? "bg-secondary text-black font-semibold"
-                        : "hover:bg-white/10"
-                    }
-                  `}
-                >
-                  <Users />
-                  <span>Share Access</span>
-                </Link>
-
-                {/* BLOCKCHAIN EXPLORER */}
-
-                <Link
-                  to="/explorer"
-                  className={`
-                    w-full flex items-center gap-3 p-4 rounded-xl transition
-                    ${
-                      location.pathname === "/explorer"
-                        ? "bg-secondary text-black font-semibold"
-                        : "hover:bg-white/10"
-                    }
-                  `}
-                >
-                  <Search />
-                  <span>Blockchain Explorer</span>
-                </Link>
-
-                {/* TRANSACTION HISTORY */}
-
-                <Link
-                  to="/user/history"
-                  className={`
-                    w-full flex items-center gap-3 p-4 rounded-xl transition
-                    ${
-                      location.pathname === "/user/history"
-                        ? "bg-secondary text-black font-semibold"
-                        : "hover:bg-white/10"
-                    }
-                  `}
-                >
-                  <FileClock />
-                  <span>Transaction History</span>
-                </Link>
-
-              </>
-            )
-          }
-
-        </div>
-
+            + Connect Wallet
+          </button>
+        )}
+        <div className="text-[11px] text-[#444] mt-1">Sepolia Testnet</div>
       </div>
 
       {/* LOGOUT */}
-
       <button
         onClick={handleLogout}
-        className="w-full flex items-center justify-center gap-3 p-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition"
+        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm
+                   text-[#6b2020] hover:bg-[#1a0a0a] transition"
       >
-
-        <LogOut />
-
-        <span>Logout</span>
-
+        <LogOut size={16} />
+        Logout
       </button>
-
     </div>
   );
 }

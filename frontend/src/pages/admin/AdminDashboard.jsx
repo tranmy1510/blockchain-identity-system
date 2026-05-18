@@ -1,207 +1,71 @@
-import {
-  Users,
-  ShieldCheck,
-  Activity,
-  Database,
-} from "lucide-react";
+import { Users, ShieldCheck, Activity, Database } from "lucide-react";
 
 const users = [
-  {
-    name: "John Doe",
-    status: "Verified",
-  },
-  {
-    name: "Alice Smith",
-    status: "Pending",
-  },
-  {
-    name: "Michael Lee",
-    status: "Verified",
-  },
+  { name: "Nguyen Van A", status: "Verified" },
+  { name: "Tran Thi B",   status: "Pending"  },
+  { name: "Le Van C",     status: "Verified" },
+];
+
+const stats = [
+  { label: "Total Users",         value: "1,248", icon: <Users size={20} />,      color: "" },
+  { label: "Verified Identities", value: "986",   icon: <ShieldCheck size={20} />, color: "text-green-id" },
+  { label: "Transactions",        value: "18K",   icon: <Database size={20} />,    color: "text-gold" },
+  { label: "Network Health",      value: "99%",   icon: <Activity size={20} />,    color: "text-green-id" },
 ];
 
 export default function AdminDashboard() {
-
   return (
-
     <div>
-
-      {/* HEADER */}
-
-      <div className="mb-8">
-
-        <h1 className="text-4xl font-bold">
-          Admin Dashboard
-        </h1>
-
-        <p className="text-gray-400 mt-2">
-          Blockchain Identity Management System
-        </p>
-
-      </div>
+      <h1 className="text-2xl font-medium mb-1">Admin Dashboard</h1>
+      <p className="text-[#555] text-sm mb-6">Blockchain Identity Management</p>
 
       {/* STATS */}
-
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
-
-        <div className="glass rounded-3xl p-6">
-
-          <div className="flex justify-between items-center">
-
-            <div>
-
-              <p className="text-gray-400">
-                Total Users
-              </p>
-
-              <h2 className="text-3xl font-bold mt-3">
-                1,248
-              </h2>
-
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {stats.map((s, i) => (
+          <div key={i} className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="section-label">{s.label}</p>
+              <span className="text-[#444]">{s.icon}</span>
             </div>
-
-            <Users size={40} />
-
+            <p className={`text-2xl font-medium ${s.color || "text-[#e8e0cc]"}`}>{s.value}</p>
           </div>
-
-        </div>
-
-        <div className="glass rounded-3xl p-6">
-
-          <div className="flex justify-between items-center">
-
-            <div>
-
-              <p className="text-gray-400">
-                Verified Identities
-              </p>
-
-              <h2 className="text-3xl font-bold mt-3 text-green-400">
-                986
-              </h2>
-
-            </div>
-
-            <ShieldCheck size={40} />
-
-          </div>
-
-        </div>
-
-        <div className="glass rounded-3xl p-6">
-
-          <div className="flex justify-between items-center">
-
-            <div>
-
-              <p className="text-gray-400">
-                Transactions
-              </p>
-
-              <h2 className="text-3xl font-bold mt-3">
-                18K
-              </h2>
-
-            </div>
-
-            <Database size={40} />
-
-          </div>
-
-        </div>
-
-        <div className="glass rounded-3xl p-6">
-
-          <div className="flex justify-between items-center">
-
-            <div>
-
-              <p className="text-gray-400">
-                Network Health
-              </p>
-
-              <h2 className="text-3xl font-bold mt-3 text-green-400">
-                99%
-              </h2>
-
-            </div>
-
-            <Activity size={40} />
-
-          </div>
-
-        </div>
-
+        ))}
       </div>
 
       {/* USER TABLE */}
-
-      <div className="glass rounded-3xl p-8 mt-8">
-
-        <div className="flex justify-between items-center mb-6">
-
-          <h2 className="text-2xl font-bold">
-            User Verification
-          </h2>
-
-          <button className="bg-secondary text-black px-5 py-2 rounded-xl font-semibold">
-            Export Logs
-          </button>
-
+      <div className="card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-dark-border">
+          <h2 className="text-sm font-medium text-[#e8e0cc]">User Verification</h2>
+          <button className="btn-gold text-xs py-1.5 px-4">Export Logs</button>
         </div>
 
-        <div className="space-y-4">
-
-          {
-            users.map((user, index) => (
-
-              <div
-                key={index}
-                className="flex justify-between items-center border border-white/10 rounded-2xl p-5"
-              >
-
-                <div>
-
-                  <h3 className="font-semibold">
-                    {user.name}
-                  </h3>
-
-                  <p className="text-gray-400 text-sm">
-                    Blockchain Identity
-                  </p>
-
-                </div>
-
-                <div className="flex items-center gap-4">
-
-                  <span
-                    className={`
-                      px-4 py-2 rounded-xl text-sm
-                      ${
-                        user.status === "Verified"
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-yellow-500/20 text-yellow-400"
-                      }
-                    `}
-                  >
-                    {user.status}
+        <table className="w-full">
+          <thead>
+            <tr className="bg-dark-2">
+              <th className="text-left px-5 py-3 section-label">Name</th>
+              <th className="text-left px-5 py-3 section-label">Type</th>
+              <th className="text-left px-5 py-3 section-label">Status</th>
+              <th className="text-left px-5 py-3 section-label">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u, i) => (
+              <tr key={i} className="border-t border-dark-border hover:bg-dark-2/50 transition">
+                <td className="px-5 py-3 text-sm">{u.name}</td>
+                <td className="px-5 py-3 text-sm text-[#555]">Blockchain Identity</td>
+                <td className="px-5 py-3">
+                  <span className={u.status === "Verified" ? "badge-verified" : "badge-pending"}>
+                    {u.status}
                   </span>
-
-                  <button className="bg-white/10 px-4 py-2 rounded-xl hover:bg-white/20 transition">
-                    View
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))
-          }
-
-        </div>
-
+                </td>
+                <td className="px-5 py-3">
+                  <button className="btn-ghost text-xs py-1.5 px-3">View</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
     </div>
   );
 }

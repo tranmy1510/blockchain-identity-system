@@ -70,7 +70,7 @@ export default function UserDashboard() {
         {/* CONNECT WALLET */}
         <button
           onClick={connectWallet}
-          className="bg-secondary text-black px-6 py-3 rounded-xl font-semibold"
+          className="bg-gold text-[#111] px-6 py-3 rounded-xl font-semibold"
         >
           {walletAddress
             ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
@@ -184,7 +184,7 @@ export default function UserDashboard() {
               </p>
               <a
                 href="/user/create-identity"
-                className="bg-secondary text-black px-5 py-2 rounded-xl font-semibold inline-block"
+                className="bg-gold text-[#111] px-5 py-2 rounded-xl font-semibold inline-block"
               >
                 Create Identity
               </a>

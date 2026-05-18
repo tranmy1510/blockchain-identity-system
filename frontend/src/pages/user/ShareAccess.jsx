@@ -74,7 +74,7 @@ export default function ShareAccess() {
         <button
           onClick={handleShare}
           disabled={loading}
-          className="bg-secondary text-black px-6 py-3 rounded-xl font-semibold flex items-center gap-2 disabled:opacity-60"
+          className="bg-gold text-[#111] px-6 py-3 rounded-xl font-semibold flex items-center gap-2 disabled:opacity-60"
         >
           <Plus size={18} />
           {loading ? "Granting..." : "Grant Access"}

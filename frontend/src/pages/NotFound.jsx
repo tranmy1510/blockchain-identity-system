@@ -1,34 +1,22 @@
 import { Link } from "react-router-dom";
+import VeriChainLogo from "../components/VeriChainLogo";
 
 export default function NotFound() {
-
   return (
+    <div className="min-h-screen bg-dark flex flex-col items-center justify-center px-4 text-center">
+      <VeriChainLogo size={42} showSub={false} />
 
-    <div className="min-h-screen flex items-center justify-center bg-dark px-6">
+      <p className="text-[120px] font-medium text-gold-bg leading-none mt-8 select-none"
+         style={{ WebkitTextStroke: "1px #3a2e00" }}>
+        404
+      </p>
 
-      <div className="text-center">
+      <h2 className="text-xl font-medium text-[#e8e0cc] mt-2">Page not found</h2>
+      <p className="text-[#555] text-sm mt-2 mb-8">
+        The blockchain page you're looking for doesn't exist.
+      </p>
 
-        <h1 className="text-8xl font-bold text-secondary">
-          404
-        </h1>
-
-        <h2 className="text-3xl font-bold mt-4">
-          Page Not Found
-        </h2>
-
-        <p className="text-gray-400 mt-4">
-          The blockchain page you are looking for does not exist.
-        </p>
-
-        <Link
-          to="/"
-          className="inline-block mt-8 bg-secondary text-black px-8 py-4 rounded-2xl font-semibold"
-        >
-          Back Home
-        </Link>
-
-      </div>
-
+      <Link to="/" className="btn-gold py-2.5 px-6">Back to Home</Link>
     </div>
   );
 }

@@ -101,7 +101,7 @@ export default function CreateIdentity() {
                 )}
               </div>
 
-              <label className="mt-4 inline-block bg-secondary text-black px-6 py-3 rounded-xl cursor-pointer font-semibold">
+              <label className="mt-4 inline-block bg-gold text-[#111] px-6 py-3 rounded-xl cursor-pointer font-semibold">
                 Upload Image
                 <input
                   type="file"
@@ -231,7 +231,7 @@ export default function CreateIdentity() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-secondary text-black py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 disabled:opacity-60"
+              className="w-full bg-gold text-[#111] py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 disabled:opacity-60"
             >
               {loading ? (
                 "Submitting..."
