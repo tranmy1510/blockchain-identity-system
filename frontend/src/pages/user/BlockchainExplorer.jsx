@@ -53,7 +53,7 @@ export default function BlockchainExplorer() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div>
-        <p className="text-cyan-400 font-medium">Blockchain Records</p>
+        <p className="text-gold font-medium">Blockchain Records</p>
 
         <h1 className="text-5xl font-bold mt-2">Blockchain Explorer</h1>
 
@@ -84,7 +84,7 @@ export default function BlockchainExplorer() {
               </h2>
             </div>
 
-            <ShieldCheck className="text-cyan-400" size={42} />
+            <ShieldCheck className="text-gold" size={42} />
           </div>
         </div>
 

@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
-import { Trash2, Plus } from "lucide-react";
-=======
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
 import api from "../../services/api";
 
 export default function ShareAccess() {
@@ -18,22 +12,6 @@ export default function ShareAccess() {
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-<<<<<<< HEAD
-  const [orgName, setOrgName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sharedList, setSharedList] = useState([]);
-
-  useEffect(() => {
-    fetchSharedList();
-  }, []);
-
-  const fetchSharedList = async () => {
-    try {
-      const res = await api.get("/access/list");
-      setSharedList(res.data.data || []);
-    } catch (error) {
-      console.log(error);
-=======
   const fieldOptions = ["fullName", "email", "status", "dob", "address"];
 
   const fetchPermissions = async () => {
@@ -54,26 +32,10 @@ export default function ShareAccess() {
       setAllowedFields(allowedFields.filter((item) => item !== field));
     } else {
       setAllowedFields([...allowedFields, field]);
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
     }
   };
 
   const handleShare = async () => {
-<<<<<<< HEAD
-    if (!orgName.trim()) {
-      toast.error("Please enter an organization name");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      await api.post("/access/grant", { organization: orgName.trim() });
-      toast.success(`Access granted to ${orgName}`);
-      setOrgName("");
-      fetchSharedList(); // Refresh danh sách
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to grant access");
-=======
     if (!thirdPartyId) {
       toast.error("Please enter third-party ID");
       return;
@@ -92,21 +54,11 @@ export default function ShareAccess() {
       fetchPermissions();
     } catch (error) {
       toast.error(error.response?.data?.message || "Share access failed");
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
     } finally {
       setLoading(false);
     }
   };
 
-<<<<<<< HEAD
-  const handleRevoke = async (id) => {
-    try {
-      await api.post(`/access/revoke/${id}`);
-      toast.success("Access revoked");
-      setSharedList((prev) => prev.filter((item) => item._id !== id));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to revoke access");
-=======
   const handleRevoke = async (permissionId) => {
     try {
       await api.put(`/access/revoke/${permissionId}`);
@@ -114,25 +66,14 @@ export default function ShareAccess() {
       fetchPermissions();
     } catch (error) {
       toast.error(error.response?.data?.message || "Revoke access failed");
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
     }
   };
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
-        <p className="text-cyan-400 font-medium">Access Control</p>
+        <p className="text-gold font-medium">Access Control</p>
 
-<<<<<<< HEAD
-      <h1 className="text-4xl font-bold mb-2">Share Access</h1>
-      <p className="text-gray-400 mb-8">
-        Grant or revoke third-party access to your verified identity
-      </p>
-
-      {/* GRANT FORM */}
-      <div className="glass rounded-3xl p-8 mb-6">
-        <h2 className="text-xl font-bold mb-4">Grant New Access</h2>
-=======
         <h1 className="text-5xl font-bold mt-2">Share Access</h1>
 
         <p className="text-gray-400 mt-3">
@@ -144,21 +85,12 @@ export default function ShareAccess() {
         <h2 className="text-2xl font-bold mb-6">Grant New Access</h2>
 
         <label className="block text-gray-400 mb-2">Third-party User ID</label>
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
 
-        <label className="block text-gray-400 mb-2">Organization Name</label>
         <input
-<<<<<<< HEAD
-          value={orgName}
-          onChange={(e) => setOrgName(e.target.value)}
-          placeholder="e.g. VietcomBank, Grab, ..."
-          className="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none mb-4"
-=======
           value={thirdPartyId}
           onChange={(e) => setThirdPartyId(e.target.value)}
           placeholder="Enter third-party user ID"
           className="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none text-white"
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
         />
 
         <div className="mt-6">
@@ -172,7 +104,7 @@ export default function ShareAccess() {
                 onClick={() => toggleField(field)}
                 className={`px-4 py-2 rounded-xl border transition ${
                   allowedFields.includes(field)
-                    ? "bg-cyan-400 text-black border-cyan-400"
+                    ? "bg-gold text-black border-gold"
                     : "bg-white/5 text-gray-300 border-white/10 hover:bg-white/10"
                 }`}
               >
@@ -185,57 +117,16 @@ export default function ShareAccess() {
         <button
           onClick={handleShare}
           disabled={loading}
-<<<<<<< HEAD
-          className="bg-gold text-[#111] px-6 py-3 rounded-xl font-semibold flex items-center gap-2 disabled:opacity-60"
-        >
-          <Plus size={18} />
-          {loading ? "Granting..." : "Grant Access"}
-        </button>
-      </div>
-
-      {/* SHARED LIST */}
-      <div className="glass rounded-3xl p-8">
-        <h2 className="text-xl font-bold mb-4">Organizations with Access</h2>
-
-        {sharedList.length === 0 ? (
-          <p className="text-gray-400">
-            No organizations have access to your identity yet.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {sharedList.map((item) => (
-              <div
-                key={item._id}
-                className="flex justify-between items-center border border-white/10 rounded-2xl p-4"
-              >
-                <div>
-                  <p className="font-semibold">{item.organization}</p>
-                  <p className="text-gray-400 text-sm">
-                    Granted {new Date(item.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleRevoke(item._id)}
-                  className="bg-red-500/20 text-red-400 hover:bg-red-500/40 transition px-4 py-2 rounded-xl flex items-center gap-2"
-                >
-                  <Trash2 size={16} />
-                  Revoke
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-=======
-          className="mt-8 bg-cyan-400 hover:bg-cyan-300 transition text-black px-8 py-4 rounded-2xl font-semibold disabled:opacity-60"
+          className="mt-8 bg-gold hover:brightness-110 transition text-black px-8 py-4 rounded-2xl font-semibold disabled:opacity-60"
         >
           {loading ? "Granting Access..." : "Grant Access"}
         </button>
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-xl">
         <div className="p-6 border-b border-white/10">
           <h2 className="text-2xl font-bold">Shared Permissions</h2>
+
           <p className="text-gray-400 mt-2">
             Manage organizations or third-parties that can view your identity
             information.
@@ -269,8 +160,10 @@ export default function ShareAccess() {
                     <p className="font-semibold">
                       {permission.thirdPartyId?.name || "Unknown"}
                     </p>
+
                     <p className="text-sm text-gray-400">
-                      {permission.thirdPartyId?.email || permission.thirdPartyId?._id}
+                      {permission.thirdPartyId?.email ||
+                        permission.thirdPartyId?._id}
                     </p>
                   </td>
 

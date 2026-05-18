@@ -1,50 +1,14 @@
 import { Outlet } from "react-router-dom";
-<<<<<<< HEAD
 import { useState } from "react";
-import { Menu } from "lucide-react";
-import { motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
-=======
-import Sidebar from "../components/Sidebar";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
   return (
-<<<<<<< HEAD
-    <div className="flex min-h-screen bg-dark text-[#e8e0cc]">
-
-      {/* SIDEBAR — mobile overlay */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300
-          ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
-      >
-        <Sidebar />
-      </div>
-
-      {/* BACKDROP mobile */}
-      {open && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
-
-      {/* MAIN */}
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-
-        {/* TOPBAR */}
-        <div className="sticky top-0 z-30 flex items-center justify-between
-                        px-6 py-3 bg-dark-2/80 backdrop-blur border-b border-dark-border">
-
-          <button onClick={() => setOpen(!open)} className="lg:hidden text-[#666]">
-            <Menu size={20} />
-=======
     <div className="min-h-screen bg-[#0B1020] text-white lg:flex">
       {open && (
         <div
@@ -71,25 +35,21 @@ export default function DashboardLayout() {
             className="rounded-xl border border-white/10 bg-white/5 p-2 lg:hidden"
           >
             {open ? <X /> : <Menu />}
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
           </button>
 
-          <div className="hidden lg:flex items-center gap-2 text-[#444] text-sm">
-            <span className="text-[#333]">VeriChain</span>
+          <div className="hidden lg:flex items-center gap-2 text-sm text-gray-400">
+            <span className="text-white font-semibold">VeriChain</span>
             <span>/</span>
-            <span className="text-[#e8e0cc] capitalize">{user?.role || "—"}</span>
+            <span className="capitalize">{user?.role || "Guest"}</span>
           </div>
 
-          {/* RIGHT: network badge + avatar */}
           <div className="flex items-center gap-3 ml-auto">
-            <div className="flex items-center gap-2 bg-gold-bg border border-gold-dim
-                            text-gold text-xs px-3 py-1.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
-              Sepolia Testnet
+            <div className="flex items-center gap-2 rounded-full border bg-gold/20 bg-gold/10 px-3 py-1.5 text-xs text-cyan-300">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+              Local Blockchain
             </div>
 
-            <div className="w-8 h-8 rounded-xl bg-gold-bg border border-gold-dim
-                            flex items-center justify-center text-gold font-medium text-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-cyan-300">
               {user?.name?.[0]?.toUpperCase() || "U"}
             </div>
           </div>
@@ -97,23 +57,9 @@ export default function DashboardLayout() {
           <div className="w-10 lg:hidden" />
         </div>
 
-<<<<<<< HEAD
-        {/* PAGE CONTENT */}
-        <motion.main
-          key={location.pathname}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex-1 p-6"
-        >
-          <Outlet />
-        </motion.main>
-
-=======
         <main className="p-6">
           <Outlet />
         </main>
->>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
       </div>
     </div>
   );
