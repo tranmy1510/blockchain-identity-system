@@ -1,15 +1,22 @@
 import { Outlet } from "react-router-dom";
+<<<<<<< HEAD
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
+=======
+import Sidebar from "../components/Sidebar";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+>>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
   return (
+<<<<<<< HEAD
     <div className="flex min-h-screen bg-dark text-[#e8e0cc]">
 
       {/* SIDEBAR — mobile overlay */}
@@ -37,6 +44,34 @@ export default function DashboardLayout() {
 
           <button onClick={() => setOpen(!open)} className="lg:hidden text-[#666]">
             <Menu size={20} />
+=======
+    <div className="min-h-screen bg-[#0B1020] text-white lg:flex">
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 w-72
+          transform transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          lg:static lg:translate-x-0 lg:flex-shrink-0
+        `}
+      >
+        <Sidebar />
+      </aside>
+
+      <div className="min-h-screen flex-1">
+        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-[#0B1020]/95 px-6 py-4 backdrop-blur-xl">
+          <button
+            onClick={() => setOpen(!open)}
+            className="rounded-xl border border-white/10 bg-white/5 p-2 lg:hidden"
+          >
+            {open ? <X /> : <Menu />}
+>>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
           </button>
 
           <div className="hidden lg:flex items-center gap-2 text-[#444] text-sm">
@@ -59,8 +94,10 @@ export default function DashboardLayout() {
             </div>
           </div>
 
+          <div className="w-10 lg:hidden" />
         </div>
 
+<<<<<<< HEAD
         {/* PAGE CONTENT */}
         <motion.main
           key={location.pathname}
@@ -72,6 +109,11 @@ export default function DashboardLayout() {
           <Outlet />
         </motion.main>
 
+=======
+        <main className="p-6">
+          <Outlet />
+        </main>
+>>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
       </div>
     </div>
   );
