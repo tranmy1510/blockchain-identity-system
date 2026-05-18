@@ -42,8 +42,12 @@ export default function Sidebar() {
         <VeriChainLogo />
       </div>
 
+<<<<<<< HEAD
       {/* MENU */}
       <div className="section-label px-2 mb-1">Menu</div>
+=======
+    <div className="w-72 h-screen bg-[#0b1020] border-r border-white/10 p-6 flex flex-col justify-between shadow-2xl">
+>>>>>>> 6fc3a67 (Complete blockchain identity system frontend and backend)
 
       <nav className="flex flex-col gap-1 flex-1">
         {navItem(`/${user?.role}/dashboard`, <LayoutDashboard size={16} />, "Dashboard")}
