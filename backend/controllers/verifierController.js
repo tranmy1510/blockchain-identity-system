@@ -71,12 +71,26 @@ const approveIdentity = async (req, res) => {
       });
     }
 
-    const identityHash = generateIdentityHash(identity);
+    const identityHash = generateIdentityHash({
+      fullName: identity.fullName,
+      dob: identity.dob,
+      email: identity.email,
+      documentId: identity.documentId,
+      address: identity.address,
+      phone: identity.phone || "",
+    });
 
-    const txHash = await storeIdentityOnBlockchain(
-      identity.userId,
-      identityHash
-    );
+    let txHash = null;
+
+    try {
+      txHash = await storeIdentityOnBlockchain(
+        identity.userId.toString(),
+        identityHash
+      );
+    } catch (blockchainError) {
+      console.error("Blockchain store failed:", blockchainError.message);
+      txHash = "LOCAL_BLOCKCHAIN_NOT_AVAILABLE";
+    }
 
     identity.status = "Verified";
     identity.identityHash = identityHash;
@@ -98,6 +112,8 @@ const approveIdentity = async (req, res) => {
       data: identity,
     });
   } catch (error) {
+    console.error("Approve identity error:", error);
+
     return res.status(500).json({
       success: false,
       message: "Approve identity failed",
@@ -141,6 +157,8 @@ const rejectIdentity = async (req, res) => {
       data: identity,
     });
   } catch (error) {
+    console.error("Reject identity error:", error);
+
     return res.status(500).json({
       success: false,
       message: "Reject identity failed",

@@ -11,6 +11,7 @@ const { protect, authorizeRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+// Verifier: get all pending identities
 router.get(
   "/pending",
   protect,
@@ -18,6 +19,7 @@ router.get(
   getPendingIdentities
 );
 
+// Verifier: get detail of one identity
 router.get(
   "/identity/:id",
   protect,
@@ -25,6 +27,7 @@ router.get(
   getIdentityDetail
 );
 
+// Verifier: approve identity
 router.put(
   "/approve/:id",
   protect,
@@ -32,6 +35,7 @@ router.put(
   approveIdentity
 );
 
+// Verifier: reject identity
 router.put(
   "/reject/:id",
   protect,
