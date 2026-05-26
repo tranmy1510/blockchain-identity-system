@@ -29,6 +29,59 @@ export default function CreateIdentity() {
     idPhoto: "",
   });
 
+  const validateForm = () => {
+    const fullName = form.fullName.trim();
+    const email = form.email.trim().toLowerCase();
+    const documentId = form.documentId.trim();
+    const address = form.address.trim();
+    const phone = form.phone.trim();
+
+    if (!fullName || !form.dob || !email || !documentId || !address) {
+      toast.error("Please fill in all required fields");
+      return false;
+    }
+
+    if (fullName.length < 3) {
+      toast.error("Full name must be at least 3 characters");
+      return false;
+    }
+
+    const dobDate = new Date(form.dob);
+    const today = new Date();
+
+    if (Number.isNaN(dobDate.getTime())) {
+      toast.error("Date of birth is invalid");
+      return false;
+    }
+
+    if (dobDate >= today) {
+      toast.error("Date of birth must be in the past");
+      return false;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      toast.error("Email format is invalid");
+      return false;
+    }
+
+    if (!/^[0-9]{12}$/.test(documentId)) {
+      toast.error("National ID must contain exactly 12 digits");
+      return false;
+    }
+
+    if (address.length < 5) {
+      toast.error("Address must be at least 5 characters");
+      return false;
+    }
+
+    if (phone && !/^(0[0-9]{9}|\+84[0-9]{9})$/.test(phone)) {
+      toast.error("Phone number must be valid, for example 0912345678 or +84912345678");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleImage = (e) => {
     const file = e.target.files[0];
 
@@ -36,6 +89,11 @@ export default function CreateIdentity() {
 
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload an image file");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image size must be less than 2MB");
       return;
     }
 
@@ -53,41 +111,60 @@ export default function CreateIdentity() {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    let newValue = value;
+
+    if (name === "documentId") {
+      newValue = value.replace(/\D/g, "").slice(0, 12);
+    }
+
+    if (name === "phone") {
+      newValue = value.replace(/[^\d+]/g, "").slice(0, 12);
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: newValue,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !form.fullName ||
-      !form.dob ||
-      !form.email ||
-      !form.documentId ||
-      !form.address
-    ) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
+    if (!validateForm()) return;
+
+    const cleanedForm = {
+      fullName: form.fullName.trim(),
+      dob: form.dob,
+      email: form.email.trim().toLowerCase(),
+      documentId: form.documentId.trim(),
+      address: form.address.trim(),
+      phone: form.phone.trim(),
+      idPhoto: form.idPhoto,
+    };
 
     try {
       setLoading(true);
 
-      await API.post("/identity", form);
+      await API.post("/identity", cleanedForm);
       await API.put("/identity/submit");
 
       toast.success("Identity submitted for verification");
       navigate("/user/dashboard");
     } catch (error) {
-      const message = error.response?.data?.message || "Create identity failed";
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0] ||
+        "Create identity failed";
+
       toast.error(message);
     } finally {
       setLoading(false);
     }
   };
+
+  const todayString = new Date().toISOString().split("T")[0];
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -197,7 +274,7 @@ export default function CreateIdentity() {
               onChange={handleChange}
               type="date"
               min="1900-01-01"
-              max="2099-12-31"
+              max={todayString}
               required
             />
 
@@ -230,6 +307,7 @@ export default function CreateIdentity() {
               onChange={handleChange}
               type="text"
               placeholder="012345678901"
+              maxLength={12}
               required
             />
 
@@ -291,6 +369,7 @@ function Field({
   required,
   min,
   max,
+  maxLength,
 }) {
   return (
     <div>
@@ -307,6 +386,7 @@ function Field({
           placeholder={placeholder}
           min={min}
           max={max}
+          maxLength={maxLength}
           className="w-full bg-transparent p-4 outline-none text-[#f5e6b8] placeholder:text-[#6f674f]"
           required={required}
         />

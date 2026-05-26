@@ -5,6 +5,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 
 import UserDashboard from "./pages/user/UserDashboard";
 import VerifierDashboard from "./pages/verifier/VerifierDashboard";
+import VerifierIdentityDetail from "./pages/verifier/VerifierIdentityDetail";
 import ThirdPartyDashboard from "./pages/thirdparty/ThirdPartyDashboard";
 
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -21,12 +22,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<DashboardLayout />}>
-
           <Route
             path="/explorer"
             element={
@@ -63,7 +62,6 @@ export default function App() {
             }
           />
 
-          {/* Route bị thiếu - đã thêm */}
           <Route
             path="/user/share-access"
             element={
@@ -78,6 +76,15 @@ export default function App() {
             element={
               <ProtectedRoute allowedRole="verifier">
                 <VerifierDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/verifier/identity/:id"
+            element={
+              <ProtectedRoute allowedRole="verifier">
+                <VerifierIdentityDetail />
               </ProtectedRoute>
             }
           />
@@ -99,11 +106,9 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-
         </Route>
 
         <Route path="*" element={<NotFound />} />
-
       </Routes>
     </BrowserRouter>
   );

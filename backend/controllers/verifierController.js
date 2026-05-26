@@ -80,16 +80,39 @@ const approveIdentity = async (req, res) => {
       phone: identity.phone || "",
     });
 
-    let txHash = null;
+    let txHash;
 
     try {
-      txHash = await storeIdentityOnBlockchain(
+      const blockchainResult = await storeIdentityOnBlockchain(
         identity.userId.toString(),
         identityHash
       );
-    } catch (blockchainError) {
+      
+      const txHash = blockchainResult.verifyTxHash;
+    } 
+    catch (blockchainError) {
       console.error("Blockchain store failed:", blockchainError.message);
-      txHash = "LOCAL_BLOCKCHAIN_NOT_AVAILABLE";
+
+      await HistoryLog.create({
+        userId: identity.userId,
+        action: "APPROVE_IDENTITY_FAILED",
+        description:
+          "Verifier attempted to approve identity, but blockchain transaction failed",
+      });
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Blockchain transaction failed. Identity was not approved. Please check Hardhat node, contract address, RPC URL, and private key.",
+        error: blockchainError.message,
+      });
+    }
+
+    if (!txHash) {
+      return res.status(500).json({
+        success: false,
+        message: "Blockchain transaction failed. No transaction hash returned.",
+      });
     }
 
     identity.status = "Verified";
@@ -108,7 +131,7 @@ const approveIdentity = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Identity approved successfully",
+      message: "Identity approved successfully and stored on blockchain",
       data: identity,
     });
   } catch (error) {
