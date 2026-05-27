@@ -112,61 +112,59 @@ export default function ShareAccess() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-4">
       <div>
-        <p className="text-gold font-medium">Access Control</p>
+        <p className="text-sm text-gold font-medium">Access Control</p>
 
-        <h1 className="text-5xl font-bold mt-2">Share Access</h1>
+        <h1 className="text-3xl font-bold mt-1">Share Access</h1>
 
-        <p className="text-gray-400 mt-3">
-          Review third-party access requests and choose exactly which identity
-          fields you want to share.
+        <p className="text-sm text-gray-400 mt-1">
+          Review third-party requests and choose which identity fields to share.
         </p>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-xl">
-        <div className="p-6 border-b border-white/10">
-          <h2 className="text-2xl font-bold">Pending Access Requests</h2>
+      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+        <div className="p-4 border-b border-white/10">
+          <h2 className="text-xl font-bold">Pending Access Requests</h2>
 
-          <p className="text-gray-400 mt-2">
-            Third-parties can request access, but you control which fields are
-            shared.
+          <p className="text-sm text-gray-400 mt-1">
+            Third-parties can request access, but you control the shared fields.
           </p>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-4 space-y-3">
           {accessRequests.length === 0 ? (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-sm text-gray-400 py-5">
               No pending access requests
             </div>
           ) : (
             accessRequests.map((request) => (
               <div
                 key={request._id}
-                className="bg-black/30 border border-white/10 rounded-3xl p-6"
+                className="bg-black/30 border border-white/10 rounded-2xl p-4"
               >
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                  <div>
-                    <p className="text-sm text-gray-400">Requested by</p>
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-xs text-gray-400">Requested by</p>
 
-                    <h3 className="text-xl font-bold mt-1">
+                    <h3 className="text-lg font-bold mt-0.5 truncate">
                       {request.requesterId?.name || "Unknown Third-party"}
                     </h3>
 
-                    <p className="text-gray-400 mt-1">
+                    <p className="text-sm text-gray-400 mt-0.5 truncate">
                       {request.requesterId?.email || request.requesterId?._id}
                     </p>
 
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-400 mb-2">
+                    <div className="mt-3">
+                      <p className="text-xs text-gray-400 mb-1.5">
                         Third-party requested:
                       </p>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         {request.requestedFields?.map((field) => (
                           <span
                             key={field}
-                            className="bg-white/10 text-gray-200 px-3 py-1 rounded-lg text-sm"
+                            className="bg-white/10 text-gray-200 px-2.5 py-1 rounded-lg text-xs"
                           >
                             {field}
                           </span>
@@ -175,18 +173,18 @@ export default function ShareAccess() {
                     </div>
                   </div>
 
-                  <div className="lg:w-[420px]">
-                    <p className="text-sm text-gray-400 mb-3">
+                  <div className="lg:w-[390px]">
+                    <p className="text-xs text-gray-400 mb-2">
                       Select fields to approve
                     </p>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-2">
                       {fieldOptions.map((field) => (
                         <button
                           type="button"
                           key={field}
                           onClick={() => toggleField(request._id, field)}
-                          className={`px-4 py-2 rounded-xl border transition ${
+                          className={`px-3 py-1.5 rounded-lg border text-xs transition ${
                             selectedFieldsByRequest[request._id]?.includes(
                               field
                             )
@@ -199,11 +197,11 @@ export default function ShareAccess() {
                       ))}
                     </div>
 
-                    <div className="mt-5 flex gap-3">
+                    <div className="mt-4 flex gap-2">
                       <button
                         onClick={() => handleApproveRequest(request._id)}
                         disabled={loading}
-                        className="flex-1 bg-green-500 hover:bg-green-600 disabled:opacity-60 transition px-5 py-3 rounded-xl font-semibold"
+                        className="flex-1 bg-green-500 hover:bg-green-600 disabled:opacity-60 transition px-4 py-2 rounded-lg text-sm font-semibold"
                       >
                         Approve
                       </button>
@@ -211,7 +209,7 @@ export default function ShareAccess() {
                       <button
                         onClick={() => handleRejectRequest(request._id)}
                         disabled={loading}
-                        className="flex-1 bg-red-500 hover:bg-red-600 disabled:opacity-60 transition px-5 py-3 rounded-xl font-semibold"
+                        className="flex-1 bg-red-500 hover:bg-red-600 disabled:opacity-60 transition px-4 py-2 rounded-lg text-sm font-semibold"
                       >
                         Reject
                       </button>
@@ -224,89 +222,91 @@ export default function ShareAccess() {
         </div>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-xl">
-        <div className="p-6 border-b border-white/10">
-          <h2 className="text-2xl font-bold">Shared Permissions</h2>
+      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+        <div className="p-4 border-b border-white/10">
+          <h2 className="text-xl font-bold">Shared Permissions</h2>
 
-          <p className="text-gray-400 mt-2">
-            Manage third-parties that currently have access to your selected
-            identity information.
+          <p className="text-sm text-gray-400 mt-1">
+            Manage third-parties that currently have access to selected identity
+            fields.
           </p>
         </div>
 
-        <table className="w-full">
-          <thead className="bg-white/5 text-gray-300">
-            <tr>
-              <th className="text-left p-5">Third-party</th>
-              <th className="text-left p-5">Allowed Fields</th>
-              <th className="text-left p-5">Status</th>
-              <th className="text-left p-5">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {permissions.length === 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-white/5 text-gray-300">
               <tr>
-                <td colSpan="4" className="p-8 text-center text-gray-400">
-                  No permissions shared yet
-                </td>
+                <th className="text-left p-3">Third-party</th>
+                <th className="text-left p-3">Allowed Fields</th>
+                <th className="text-left p-3">Status</th>
+                <th className="text-left p-3">Action</th>
               </tr>
-            ) : (
-              permissions.map((permission) => (
-                <tr
-                  key={permission._id}
-                  className="border-t border-white/10 hover:bg-white/5 transition"
-                >
-                  <td className="p-5">
-                    <p className="font-semibold">
-                      {permission.thirdPartyId?.name || "Unknown"}
-                    </p>
+            </thead>
 
-                    <p className="text-sm text-gray-400">
-                      {permission.thirdPartyId?.email ||
-                        permission.thirdPartyId?._id}
-                    </p>
-                  </td>
-
-                  <td className="p-5">
-                    <div className="flex flex-wrap gap-2">
-                      {permission.allowedFields?.map((field) => (
-                        <span
-                          key={field}
-                          className="bg-white/10 text-gray-200 px-3 py-1 rounded-lg text-sm"
-                        >
-                          {field}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-
-                  <td className="p-5">
-                    <span
-                      className={`px-4 py-2 rounded-xl text-sm ${
-                        permission.isActive
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {permission.isActive ? "Active" : "Revoked"}
-                    </span>
-                  </td>
-
-                  <td className="p-5">
-                    <button
-                      onClick={() => handleRevoke(permission._id)}
-                      disabled={!permission.isActive}
-                      className="bg-red-500 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition px-5 py-2 rounded-xl font-medium"
-                    >
-                      Revoke
-                    </button>
+            <tbody>
+              {permissions.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="p-5 text-center text-gray-400">
+                    No permissions shared yet
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                permissions.map((permission) => (
+                  <tr
+                    key={permission._id}
+                    className="border-t border-white/10 hover:bg-white/5 transition"
+                  >
+                    <td className="p-3">
+                      <p className="font-semibold">
+                        {permission.thirdPartyId?.name || "Unknown"}
+                      </p>
+
+                      <p className="text-xs text-gray-400">
+                        {permission.thirdPartyId?.email ||
+                          permission.thirdPartyId?._id}
+                      </p>
+                    </td>
+
+                    <td className="p-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {permission.allowedFields?.map((field) => (
+                          <span
+                            key={field}
+                            className="bg-white/10 text-gray-200 px-2.5 py-1 rounded-lg text-xs"
+                          >
+                            {field}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+
+                    <td className="p-3">
+                      <span
+                        className={`px-3 py-1.5 rounded-lg text-xs ${
+                          permission.isActive
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
+                        {permission.isActive ? "Active" : "Revoked"}
+                      </span>
+                    </td>
+
+                    <td className="p-3">
+                      <button
+                        onClick={() => handleRevoke(permission._id)}
+                        disabled={!permission.isActive}
+                        className="bg-red-500 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition px-4 py-1.5 rounded-lg text-xs font-medium"
+                      >
+                        Revoke
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

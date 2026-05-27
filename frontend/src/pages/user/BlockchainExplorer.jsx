@@ -51,163 +51,134 @@ export default function BlockchainExplorer() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-4">
       <div>
-        <p className="text-gold font-medium">Blockchain Records</p>
+        <p className="text-sm text-gold font-medium">Blockchain Records</p>
 
-        <h1 className="text-5xl font-bold mt-2">Blockchain Explorer</h1>
+        <h1 className="text-3xl font-bold mt-1">Blockchain Explorer</h1>
 
-        <p className="text-gray-400 mt-3">
+        <p className="text-sm text-gray-400 mt-1">
           Track identity hash, verification status, and blockchain transaction
           proof.
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400">Verification Status</p>
+      <div className="grid lg:grid-cols-3 gap-4">
+        <StatCard
+          label="Verification Status"
+          value={statusData?.status || "Not Submitted"}
+          icon={<ShieldCheck className="text-gold" size={30} />}
+          valueClass={
+            statusData?.status === "Verified"
+              ? "text-green-400"
+              : statusData?.status === "Pending"
+              ? "text-yellow-400"
+              : statusData?.status === "Rejected"
+              ? "text-red-400"
+              : "text-gray-300"
+          }
+        />
 
-              <h2
-                className={`text-2xl font-bold mt-3 ${
-                  statusData?.status === "Verified"
-                    ? "text-green-400"
-                    : statusData?.status === "Pending"
-                    ? "text-yellow-400"
-                    : statusData?.status === "Rejected"
-                    ? "text-red-400"
-                    : "text-gray-300"
-                }`}
-              >
-                {statusData?.status || "Not Submitted"}
-              </h2>
-            </div>
+        <StatCard
+          label="Identity Hash"
+          value={statusData?.identityHash ? "Generated" : "Not Generated"}
+          icon={<Hash className="text-purple-300" size={30} />}
+        />
 
-            <ShieldCheck className="text-gold" size={42} />
-          </div>
-        </div>
-
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400">Identity Hash</p>
-
-              <h2 className="text-xl font-bold mt-3">
-                {statusData?.identityHash ? "Generated" : "Not Generated"}
-              </h2>
-            </div>
-
-            <Hash className="text-purple-300" size={42} />
-          </div>
-        </div>
-
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400">Blockchain TX</p>
-
-              <h2 className="text-xl font-bold mt-3">
-                {statusData?.blockchainTxHash ? "Confirmed" : "No TX"}
-              </h2>
-            </div>
-
-            {statusData?.blockchainTxHash ? (
-              <CheckCircle className="text-green-400" size={42} />
+        <StatCard
+          label="Blockchain TX"
+          value={statusData?.blockchainTxHash ? "Confirmed" : "No TX"}
+          icon={
+            statusData?.blockchainTxHash ? (
+              <CheckCircle className="text-green-400" size={30} />
             ) : (
-              <Clock3 className="text-yellow-400" size={42} />
-            )}
-          </div>
-        </div>
+              <Clock3 className="text-yellow-400" size={30} />
+            )
+          }
+        />
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 shadow-xl">
-        <h2 className="text-2xl font-bold mb-6">Current Identity Proof</h2>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <ProofBox
+          title="Identity Hash"
+          value={statusData?.identityHash || "No identity hash generated yet"}
+        />
 
-        <div className="space-y-5">
-          <div>
-            <p className="text-gray-400 mb-2">Identity Hash</p>
-
-            <div className="bg-black/20 border border-white/10 rounded-2xl p-4 break-all text-sm text-gray-200">
-              {statusData?.identityHash || "No identity hash generated yet"}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-gray-400 mb-2">Transaction Hash</p>
-
-            <div className="bg-black/20 border border-white/10 rounded-2xl p-4 break-all text-sm text-gray-200">
-              {statusData?.blockchainTxHash ||
-                "No blockchain transaction available yet"}
-            </div>
-          </div>
-        </div>
+        <ProofBox
+          title="Transaction Hash"
+          value={
+            statusData?.blockchainTxHash ||
+            "No blockchain transaction available yet"
+          }
+        />
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl">
-        <div className="flex items-center gap-3">
-          <Search className="text-gray-400" />
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-3 shadow-lg">
+        <div className="flex items-center gap-2">
+          <Search className="text-gray-400" size={18} />
 
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by transaction hash, action, or description..."
-            className="w-full bg-transparent p-3 outline-none text-white"
+            className="w-full bg-transparent p-2 outline-none text-sm text-white"
           />
         </div>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-3">
         {loading ? (
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center text-gray-400">
-            Loading blockchain records...
-          </div>
+          <EmptyState text="Loading blockchain records..." />
         ) : filteredLogs.length === 0 ? (
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center text-gray-400">
-            No blockchain records found
-          </div>
+          <EmptyState text="No blockchain records found" />
         ) : (
-          filteredLogs.map((tx) => (
+          filteredLogs.slice(0, 5).map((tx) => (
             <div
               key={tx._id}
-              className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl hover:bg-white/[0.07] transition"
+              className="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-lg hover:bg-white/[0.07] transition"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div className="space-y-3 flex-1">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div className="space-y-2 flex-1 min-w-0">
                   <div>
-                    <p className="text-gray-400 text-sm">Action</p>
-                    <h2 className="font-semibold">{tx.action}</h2>
+                    <p className="text-gray-400 text-xs">Action</p>
+                    <h2 className="text-sm font-semibold">{tx.action}</h2>
                   </div>
 
                   <div>
-                    <p className="text-gray-400 text-sm">Description</p>
-                    <p className="text-gray-300">{tx.description}</p>
+                    <p className="text-gray-400 text-xs">Description</p>
+                    <p className="text-sm text-gray-300">{tx.description}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-400 text-sm">Transaction Hash</p>
-                    <p className="break-all text-sm">
+                    <p className="text-gray-400 text-xs">Transaction Hash</p>
+                    <p className="break-all text-xs text-gray-200 line-clamp-2">
                       {tx.txHash || "No blockchain transaction"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-start lg:items-end gap-3">
+                <div className="flex flex-col items-start lg:items-end gap-2">
                   <div
-                    className={`px-4 py-2 rounded-xl text-sm flex items-center gap-2 ${
+                    className={`px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 ${
                       tx.txHash
                         ? "bg-green-500/20 text-green-400"
                         : "bg-yellow-500/20 text-yellow-400"
                     }`}
                   >
-                    {tx.txHash ? <CheckCircle size={18} /> : <Clock3 size={18} />}
+                    {tx.txHash ? (
+                      <CheckCircle size={15} />
+                    ) : (
+                      <Clock3 size={15} />
+                    )}
                     {tx.txHash ? "Confirmed" : "Off-chain Log"}
                   </div>
 
                   <div className="text-left lg:text-right">
-                    <p className="text-gray-400 text-sm">Time</p>
-                    <p>{new Date(tx.createdAt).toLocaleString()}</p>
+                    <p className="text-gray-400 text-xs">Time</p>
+                    <p className="text-xs">
+                      {new Date(tx.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -215,6 +186,42 @@ export default function BlockchainExplorer() {
           ))
         )}
       </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon, valueClass = "text-white" }) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-lg">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-sm text-gray-400">{label}</p>
+
+          <h2 className={`text-xl font-bold mt-2 ${valueClass}`}>{value}</h2>
+        </div>
+
+        {icon}
+      </div>
+    </div>
+  );
+}
+
+function ProofBox({ title, value }) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-lg">
+      <h2 className="text-lg font-bold mb-2">{title}</h2>
+
+      <div className="bg-black/20 border border-white/10 rounded-xl p-3 break-all text-xs text-gray-200 line-clamp-3">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({ text }) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center text-sm text-gray-400">
+      {text}
     </div>
   );
 }

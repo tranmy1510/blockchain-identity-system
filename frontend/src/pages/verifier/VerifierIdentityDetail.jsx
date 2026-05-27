@@ -76,7 +76,7 @@ export default function VerifierIdentityDetail() {
 
   if (loading) {
     return (
-      <div className="p-8 text-center text-gray-400">
+      <div className="p-5 text-center text-sm text-gray-400">
         Loading identity detail...
       </div>
     );
@@ -84,36 +84,36 @@ export default function VerifierIdentityDetail() {
 
   if (!identity) {
     return (
-      <div className="p-8 text-center text-gray-400">
+      <div className="p-5 text-center text-sm text-gray-400">
         Identity not found
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="max-w-6xl mx-auto space-y-4">
+      <div>
         <button
           onClick={() => navigate("/verifier/dashboard")}
-          className="mb-5 flex items-center gap-2 text-gray-400 hover:text-gold transition"
+          className="mb-3 flex items-center gap-2 text-sm text-gray-400 hover:text-gold transition"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={16} />
           Back to Pending List
         </button>
 
-        <p className="text-gold font-medium">Verifier Portal</p>
+        <p className="text-sm text-gold font-medium">Verifier Portal</p>
 
-        <h1 className="text-5xl font-bold mt-2">Identity Details</h1>
+        <h1 className="text-3xl font-bold mt-1">Identity Details</h1>
 
-        <p className="text-gray-400 mt-3">
-          Review the submitted information carefully before approving or rejecting.
+        <p className="text-sm text-gray-400 mt-1">
+          Review submitted information before approving or rejecting.
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-4">
         <div className="lg:col-span-1">
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl">
-            <div className="w-full aspect-square rounded-3xl bg-black/30 border border-white/10 overflow-hidden flex items-center justify-center">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-lg">
+            <div className="w-full h-56 rounded-2xl bg-black/30 border border-white/10 overflow-hidden flex items-center justify-center">
               {identity.idPhoto ? (
                 <img
                   src={identity.idPhoto}
@@ -121,15 +121,15 @@ export default function VerifierIdentityDetail() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="text-center text-gray-500">
-                  <ImageIcon size={46} className="mx-auto mb-3" />
+                <div className="text-center text-sm text-gray-500">
+                  <ImageIcon size={34} className="mx-auto mb-2" />
                   No ID Photo
                 </div>
               )}
             </div>
 
-            <div className="mt-6">
-              <span className="inline-flex bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-xl text-sm">
+            <div className="mt-3">
+              <span className="inline-flex bg-yellow-500/20 text-yellow-400 px-3 py-1.5 rounded-lg text-xs">
                 {identity.status}
               </span>
             </div>
@@ -137,18 +137,18 @@ export default function VerifierIdentityDetail() {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold mb-6">Submitted Information</h2>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Submitted Information</h2>
 
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid md:grid-cols-2 gap-3">
               <InfoItem
-                icon={<User />}
+                icon={<User size={18} />}
                 label="Full Name"
                 value={identity.fullName}
               />
 
               <InfoItem
-                icon={<Calendar />}
+                icon={<Calendar size={18} />}
                 label="Date of Birth"
                 value={
                   identity.dob
@@ -158,53 +158,52 @@ export default function VerifierIdentityDetail() {
               />
 
               <InfoItem
-                icon={<Mail />}
+                icon={<Mail size={18} />}
                 label="Email"
                 value={identity.email}
               />
 
               <InfoItem
-                icon={<Phone />}
+                icon={<Phone size={18} />}
                 label="Phone"
                 value={identity.phone || "N/A"}
               />
 
               <InfoItem
-                icon={<CreditCard />}
+                icon={<CreditCard size={18} />}
                 label="National ID"
                 value={identity.documentId}
               />
 
               <InfoItem
-                icon={<MapPin />}
+                icon={<MapPin size={18} />}
                 label="Address"
                 value={identity.address}
               />
             </div>
 
-            <div className="mt-8 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-100 text-sm leading-6">
-              Verifier should compare the submitted information with the uploaded ID
-              photo or external trusted records before approving. Once approved,
-              the backend will generate an identity hash and store verification
-              proof on blockchain.
+            <div className="mt-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-100 text-xs leading-5">
+              Verifier should compare submitted information with the uploaded ID
+              photo or trusted records. Once approved, backend generates a hash
+              and stores verification proof on blockchain.
             </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleApprove}
                 disabled={actionLoading}
-                className="flex-1 bg-green-500 hover:bg-green-600 transition px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 disabled:opacity-60"
+                className="flex-1 bg-green-500 hover:bg-green-600 transition px-5 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                <CheckCircle />
+                <CheckCircle size={18} />
                 {actionLoading ? "Processing..." : "Approve Identity"}
               </button>
 
               <button
                 onClick={handleReject}
                 disabled={actionLoading}
-                className="flex-1 bg-red-500 hover:bg-red-600 transition px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 disabled:opacity-60"
+                className="flex-1 bg-red-500 hover:bg-red-600 transition px-5 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                <XCircle />
+                <XCircle size={18} />
                 {actionLoading ? "Processing..." : "Reject Identity"}
               </button>
             </div>
@@ -217,13 +216,13 @@ export default function VerifierIdentityDetail() {
 
 function InfoItem({ icon, label, value }) {
   return (
-    <div className="bg-black/30 border border-white/10 rounded-2xl p-5">
-      <div className="flex items-center gap-3 text-gray-400 mb-2">
+    <div className="bg-black/30 border border-white/10 rounded-xl p-3">
+      <div className="flex items-center gap-2 text-gray-400 mb-1">
         <span className="text-gold">{icon}</span>
-        <span className="text-sm">{label}</span>
+        <span className="text-xs">{label}</span>
       </div>
 
-      <p className="text-lg font-semibold break-words">{value || "N/A"}</p>
+      <p className="text-sm font-semibold break-words">{value || "N/A"}</p>
     </div>
   );
 }
