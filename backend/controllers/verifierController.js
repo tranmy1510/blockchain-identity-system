@@ -24,7 +24,7 @@ const getPendingIdentities = async (req, res) => {
   }
 };
 
-// Get identity detail by ID
+// Get identity detail
 const getIdentityDetail = async (req, res) => {
   try {
     const identity = await Identity.findById(req.params.id).populate(
@@ -87,11 +87,10 @@ const approveIdentity = async (req, res) => {
         identity.userId.toString(),
         identityHash
       );
-      
-      const txHash = blockchainResult.verifyTxHash;
-    } 
-    catch (blockchainError) {
-      console.error("Blockchain store failed:", blockchainError.message);
+
+      txHash = blockchainResult.verifyTxHash;
+    } catch (blockchainError) {
+      console.error("Blockchain store failed:", blockchainError);
 
       await HistoryLog.create({
         userId: identity.userId,
@@ -103,7 +102,7 @@ const approveIdentity = async (req, res) => {
       return res.status(500).json({
         success: false,
         message:
-          "Blockchain transaction failed. Identity was not approved. Please check Hardhat node, contract address, RPC URL, and private key.",
+          "Blockchain transaction failed. Identity was not approved.",
         error: blockchainError.message,
       });
     }
@@ -111,7 +110,8 @@ const approveIdentity = async (req, res) => {
     if (!txHash) {
       return res.status(500).json({
         success: false,
-        message: "Blockchain transaction failed. No transaction hash returned.",
+        message:
+          "Blockchain transaction failed. No transaction hash returned.",
       });
     }
 

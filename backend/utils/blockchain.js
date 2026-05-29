@@ -19,9 +19,16 @@ const getContract = () => {
   }
 
   const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-  return new ethers.Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
+  const baseWallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+
+  const managedWallet = new ethers.NonceManager(baseWallet);
+
+  return new ethers.Contract(
+    process.env.CONTRACT_ADDRESS,
+    contractABI,
+    managedWallet
+  );
 };
 
 const normalizeBytes32Hash = (identityHash) => {
